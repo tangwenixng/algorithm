@@ -3,6 +3,9 @@
  */
 public class PercolationStats {
     public PercolationStats(int n, int trials) {
+        if(trials <=0 || n<=0){
+            throw new java.lang.IllegalArgumentException("Error: n and trials must big than 0!");
+        }
 
     }
     public double mean() {
