@@ -8,13 +8,13 @@ import java.util.Map;
  * @author Haibo Yu on 09/27/2017.
  */
 public class ChineseNumberConverter {
-    //存放数量级中文数字信息
+    //存放数量级中文数字信息 {十，百。。。亿。。。}
     private static Map<String,Long> magnitudeMap = getMagnitudeMap();
-    //存放0~9基本中文数字信息
+    //存放0~9基本中文数字信息, {一，二。。。九，零}
     private static Map<String,Long> dataMap = getDataMap();
 
     public static void main(String[] args) {
-        String testString = "二十五万五百亿三千零八万一千零卅五";
+        String testString = "八万一千零卅五";
         System.out.println("The input value is :"+testString);
         long convertedValue = 0;
         try {
@@ -71,6 +71,12 @@ public class ChineseNumberConverter {
         return sumVal;
     }
 
+    /**
+     * 从后往前遍历字符串的方式将中文数字转换为阿拉伯数字
+     * @param inputStr 源字符串
+     * @return 转换后的阿拉伯数字
+     * @throws Exception 如果字符串中有不能识别的（不在dataMap和operatorMap）字符，抛出异常
+     */
     public long convertToLongFromEnd(String inputStr) throws Exception{
         //存储遇到该数字前的最大一个数量级，这个值是累乘之前所有数量级，
         //比如三千两百万，到三的时候最高数量级就是1000*10000
