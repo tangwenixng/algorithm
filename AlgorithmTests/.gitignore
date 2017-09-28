@@ -1,3 +1,5 @@
 .DS_Store
 AlgorithmTests.iml
 .idea/
+out/
+out/*

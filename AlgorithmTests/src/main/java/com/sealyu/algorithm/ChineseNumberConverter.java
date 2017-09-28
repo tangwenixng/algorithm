@@ -14,7 +14,7 @@ public class ChineseNumberConverter {
     private static Map<String,Long> dataMap = getDataMap();
 
     public static void main(String[] args) {
-        String testString = "八万一千零卅五";
+        String testString = "八万一千零三十五";
         System.out.println("The input value is :"+testString);
         long convertedValue = 0;
         try {
@@ -90,10 +90,15 @@ public class ChineseNumberConverter {
             String currentTxt = String.valueOf(inputStr.charAt(i));
             if(magnitudeMap.containsKey(currentTxt)){
                 currentMagnitude = magnitudeMap.get(currentTxt);
+                //如果第一位是一个数量级（比如十二）, 将当前值相加
+                if(i == 0){
+                    sumVal = sumVal + currentMagnitude;
+                    return  sumVal;
+                }
                 //比较当前数量级与之前数量级，如果
                 if(currentMagnitude > maxMagnitude){
                     maxMagnitude = currentMagnitude;
-                    sumVal = sumVal + currentMagnitude;
+                    //sumVal = sumVal + currentMagnitude;
                 }else{
                     //如果当前数量级小于目前数量级,比如二百万，抵达"百"的时候数量级应该为100*10000
                     maxMagnitude = maxMagnitude*currentMagnitude;
@@ -121,8 +126,6 @@ public class ChineseNumberConverter {
     private static Map<String,Long> getMagnitudeMap(){
         Map<String,Long> magnitudeMap = new HashMap();
         magnitudeMap.put("十", 10l);
-        magnitudeMap.put("廿", 20l);
-        magnitudeMap.put("卅", 30l);
         magnitudeMap.put("百", 100l);
         magnitudeMap.put("千", 1000l);
         magnitudeMap.put("万", 10000l);

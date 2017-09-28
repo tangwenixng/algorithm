@@ -16,34 +16,34 @@ public class TestChineseNumberConverter {
         String testString = "十";
         long expectedOutput = 10l;
         long realOutput = converter.convertToLongFromEnd(testString);
-        assertEquals(realOutput,expectedOutput);
+        assertEquals(expectedOutput,realOutput);
 
         testString = "十五";
         expectedOutput = 15l;
         realOutput = converter.convertToLongFromEnd(testString);
-        assertEquals(realOutput,expectedOutput);
+        assertEquals(expectedOutput,realOutput);
 
-        testString = "廿五";
+        testString = "二十五";
         expectedOutput = 25l;
         realOutput = converter.convertToLongFromEnd(testString);
-        assertEquals(realOutput,expectedOutput);
+        assertEquals(expectedOutput,realOutput);
 
         testString = "一百零五";
-        expectedOutput = 25l;
+        expectedOutput = 105l;
         realOutput = converter.convertToLongFromEnd(testString);
-        assertEquals(realOutput,expectedOutput);
+        assertEquals(expectedOutput,realOutput);
 
-        testString = "八万一千零卅五";
+        testString = "八万一千零三十五";
         expectedOutput = 81035l;
         realOutput = converter.convertToLongFromEnd(testString);
-        assertEquals(realOutput,expectedOutput);
+        assertEquals(expectedOutput,realOutput);
     }
 
     @Test
     public void testComplicatedUsingFromEndStrategy() throws Exception{
-        String testString = "二十五万五百亿三千零八万一千零卅五";
+        String testString = "二十五万五百亿三千零八万一千零三十五";
         long expectedOutput = 25050030081035l;
         long realOutput = converter.convertToLongFromEnd(testString);
-        assertEquals(realOutput,expectedOutput);
+        assertEquals(expectedOutput,realOutput);
     }
 }
