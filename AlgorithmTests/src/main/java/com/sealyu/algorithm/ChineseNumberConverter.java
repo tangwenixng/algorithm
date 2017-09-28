@@ -14,7 +14,7 @@ public class ChineseNumberConverter {
     private static Map<String,Long> dataMap = getDataMap();
 
     public static void main(String[] args) {
-        String testString = "八万一千零三十五";
+        String testString = "二十五万五百亿三千零八万一千零三十五";
         System.out.println("The input value is :"+testString);
         long convertedValue = 0;
         try {
@@ -26,51 +26,6 @@ public class ChineseNumberConverter {
         }
     }
 
-    public long convertToLong(String inputStr) throws Exception{
-        long currentMagnitude = 1;
-        long tempData = 1;
-        long currentValue = 0;
-        int len = inputStr.length();
-        long sumVal = 0;
-        //Check if the previous text is number;
-        //True for magnitude, false for number.
-        boolean isPreviousMag = false;
-        for(int i=0;i<len;i++){
-            String currentTxt = inputStr.substring(i,i+1);
-            if(magnitudeMap.containsKey(currentTxt)){
-                //If it's magnitude
-                currentMagnitude = magnitudeMap.get(currentTxt);
-                currentValue = currentValue * currentMagnitude;
-                if(isPreviousMag){
-                    //If previous one is also magnitude, multiple with previous value.
-                    currentValue = currentValue * currentMagnitude;
-                }else{
-                    //If previous one is number, just multiple it.
-                    currentValue = tempData * currentMagnitude;
-                }
-
-                isPreviousMag = true;
-            }else if(dataMap.containsKey(currentTxt)){
-                //Add the previous part to result and reset current value
-                sumVal = sumVal + currentValue;
-                currentValue = 0;
-
-                //If it's number
-                long data = dataMap.get(currentTxt);
-                if(data == 0){
-                    continue;
-                }else{
-                    tempData = data;
-                    currentValue = currentValue + tempData;
-                }
-                isPreviousMag = false;
-            }else{
-                throw new Exception("Find illegal character in the input string:"+currentTxt);
-            }
-        }
-        return sumVal;
-    }
-
     /**
      * 从后往前遍历字符串的方式将中文数字转换为阿拉伯数字
      * @param inputStr 源字符串
@@ -78,16 +33,24 @@ public class ChineseNumberConverter {
      * @throws Exception 如果字符串中有不能识别的（不在dataMap和operatorMap）字符，抛出异常
      */
     public long convertToLongFromEnd(String inputStr) throws Exception{
-        //存储遇到该数字前的最大一个数量级，这个值是累乘之前所有数量级，
-        //比如三千两百万，到三的时候最高数量级就是1000*10000
-        long maxMagnitude = 1l;
+        //存储遇到该数字前的最大一个数量值，这个值是累乘之前所有数量级，
+        //比如二百万，到二的时候最高数量级就是100*10000
+        long currentMaxLevel = 1l;
+        //存储之前一次执行过乘操作的数量级
+        long previousOpeMagnitude = 1l;
+        //存储当前字符所对应的数量级
         long currentMagnitude = 1l;
+        //存储当前所有字符仲最大的单个字符的数量级，
+        long maxMagnitude = 1l;
+
         long sumVal = 0l;
 
         int len = inputStr.length();
         //倒序循环整个字符串，从最低位开始计算整个数值
         for(int i=len-1;i>=0;i--){
             String currentTxt = String.valueOf(inputStr.charAt(i));
+
+            //如果当前值是数量级
             if(magnitudeMap.containsKey(currentTxt)){
                 currentMagnitude = magnitudeMap.get(currentTxt);
                 //如果第一位是一个数量级（比如十二）, 将当前值相加
@@ -95,13 +58,23 @@ public class ChineseNumberConverter {
                     sumVal = sumVal + currentMagnitude;
                     return  sumVal;
                 }
-                //比较当前数量级与之前数量级，如果
+                //比较当前数量级与当前最大数量值，如果大于当前最大值，将当然最大数量值更新为当前数量级
+                if(currentMagnitude > currentMaxLevel){
+                    currentMaxLevel = currentMagnitude;
+                }else{
+                    if(currentMagnitude < maxMagnitude && currentMagnitude > previousOpeMagnitude){
+                        //如果当前数量级小于当前最大数量级并且大于之前的数量级,比如二十五万五百亿，抵达"万"的时候因为之前的百
+                        //已经与亿相乘，所以应该除以之前的百才能得到当前真正的最大数量值
+                        currentMaxLevel = currentMaxLevel*currentMagnitude/previousOpeMagnitude;
+                    }else{
+                        currentMaxLevel = currentMaxLevel*currentMagnitude;
+                    }
+                    previousOpeMagnitude = currentMagnitude;
+                }
+
+                //将当前最大单数量级更新为当前数量级
                 if(currentMagnitude > maxMagnitude){
                     maxMagnitude = currentMagnitude;
-                    //sumVal = sumVal + currentMagnitude;
-                }else{
-                    //如果当前数量级小于目前数量级,比如二百万，抵达"百"的时候数量级应该为100*10000
-                    maxMagnitude = maxMagnitude*currentMagnitude;
                 }
             }else if(dataMap.containsKey(currentTxt)){
                 //如果是0~9之间的数字，与前面一位数量级相乘，并累加到当前sumVal
@@ -110,7 +83,7 @@ public class ChineseNumberConverter {
                     //跳过0
                     continue;
                 }else{
-                    sumVal = sumVal + data*maxMagnitude;
+                    sumVal = sumVal + data*currentMaxLevel;
                 }
             }else{
                 throw new Exception("Find illegal character in the input string:"+currentTxt);

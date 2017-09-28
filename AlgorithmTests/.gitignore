@@ -2,4 +2,4 @@
 AlgorithmTests.iml
 .idea/
 out/
-out/*
+*.class

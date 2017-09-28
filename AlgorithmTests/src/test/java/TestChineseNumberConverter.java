@@ -37,6 +37,26 @@ public class TestChineseNumberConverter {
         expectedOutput = 81035l;
         realOutput = converter.convertToLongFromEnd(testString);
         assertEquals(expectedOutput,realOutput);
+
+        testString = "八万零五";
+        expectedOutput = 80005l;
+        realOutput = converter.convertToLongFromEnd(testString);
+        assertEquals(expectedOutput,realOutput);
+
+        testString = "八万零一十五";
+        expectedOutput = 80015l;
+        realOutput = converter.convertToLongFromEnd(testString);
+        assertEquals(expectedOutput,realOutput);
+
+        testString = "八万五百零五";
+        expectedOutput = 80505l;
+        realOutput = converter.convertToLongFromEnd(testString);
+        assertEquals(expectedOutput,realOutput);
+
+        testString = "二十五万五百";
+        expectedOutput = 250500l;
+        realOutput = converter.convertToLongFromEnd(testString);
+        assertEquals(expectedOutput,realOutput);
     }
 
     @Test
