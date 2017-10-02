@@ -1,4 +1,4 @@
-import com.sealyu.algorithm.ChineseNumberConverter;
+import com.haiboyu.algorithm.other.ChineseNumberConverter;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
