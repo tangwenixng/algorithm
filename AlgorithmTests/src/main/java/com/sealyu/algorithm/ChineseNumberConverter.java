@@ -94,7 +94,7 @@ public class ChineseNumberConverter {
 
     /**
      * 数量级map，存储对应的数量级文字和对应的阿拉伯数字量值
-     * @return The operator map
+     * @return The magnitude map
      */
     private static Map<String,Long> getMagnitudeMap(){
         Map<String,Long> magnitudeMap = new HashMap();
