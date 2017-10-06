@@ -1,5 +1,8 @@
 package com.haiboyu.algorithm.linkedlist;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class includes all linked list related algorithms
  * @author Haibo Yu on 09/27/2017.
@@ -17,8 +20,14 @@ public class LinkedListAlgorithms {
         //Node headNodeAfter = lla.deleteNodeInO1TimeComplexity(headNodeBefore,last);
         //Node headNodeAfter = lla.transposeLinkedList(headNodeBefore);
         //Node headNodeAfter = lla.getLastKNodeOfTheLinkedList(headNodeBefore,4);
-        Node headNodeAfter = lla.getMiddleNodeOfTheLinkedList(headNodeBefore);
-        printNode(headNodeAfter);
+        //Node headNodeAfter = lla.getMiddleNodeOfTheLinkedList(headNodeBefore);
+        //printNode(headNodeAfter);
+        //printList(headNodeAfter);
+        last.setNext(thirdNode);
+        //boolean hasCircle = lla.checkIfLinkedListHasCircle(headNodeBefore);
+        //System.out.println(hasCircle);
+        Node entryNode = lla.getCircleEntryNodeOfTheLinkedListWithCircle1(headNodeBefore);
+        printNode(entryNode);
     }
 
     private static Node prepareSampleLinkedList(){
@@ -128,6 +137,67 @@ public class LinkedListAlgorithms {
      * @return The middle node
      */
     public Node getMiddleNodeOfTheLinkedList(Node headNodeOfSourceList){
+        Node position1 = headNodeOfSourceList;
+        Node position2 = headNodeOfSourceList;
+
+        //Then move both position1 and position2 forward, when position2 reach end,
+        // position1 is the last k-th element.
+        while(position2 != null && position2.getNext() != null){
+            position1 = position1.getNext();
+            position2 = position2.getNext().getNext();
+        }
+
+        return position1;
+    }
+
+    /**
+     * Given a linked list, check if it has circle:
+     * @param headNodeOfSourceList
+     * @return The flag of if it has circle
+     */
+    public boolean checkIfLinkedListHasCircle(Node headNodeOfSourceList){
+        Node position1 = headNodeOfSourceList;
+        Node position2 = headNodeOfSourceList;
+
+        //Then move both position1 and position2 forward, if position2 reach null means no circle,
+        // else position2 will catch up with position1 when there is circle.
+        while(position2 != null && position2.getNext() != null){
+            position1 = position1.getNext();
+            position2 = position2.getNext().getNext();
+            if(position1.equals(position2)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Given a linked list, get the entry node of the circle if the linked list has circle.
+     * Use an extra list
+     * @param headNodeOfSourceList
+     * @return The middle node
+     */
+    public Node getCircleEntryNodeOfTheLinkedListWithCircle1(Node headNodeOfSourceList){
+        List<Node> nodes = new ArrayList<>();
+
+        while(headNodeOfSourceList.getNext() != null){
+            nodes.add(headNodeOfSourceList);
+            headNodeOfSourceList = headNodeOfSourceList.getNext();
+            if(nodes.contains(headNodeOfSourceList)){
+                return headNodeOfSourceList;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Given a linked list, get the entry node of the circle if the linked list has circle.
+     * Using 2 pointers
+     * @param headNodeOfSourceList
+     * @return The middle node
+     */
+    public Node getCircleEntryNodeOfTheLinkedListWithCircle2(Node headNodeOfSourceList){
         Node position1 = headNodeOfSourceList;
         Node position2 = headNodeOfSourceList;
 
