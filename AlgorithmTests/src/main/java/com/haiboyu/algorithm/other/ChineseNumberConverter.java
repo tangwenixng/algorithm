@@ -1,4 +1,4 @@
-package com.sealyu.algorithm;
+package com.haiboyu.algorithm.other;
 
 import java.util.HashMap;
 import java.util.Map;
