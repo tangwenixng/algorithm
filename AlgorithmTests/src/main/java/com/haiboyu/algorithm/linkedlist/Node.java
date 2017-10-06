@@ -1,4 +1,4 @@
-package com.sealyu.algorithm.linkedlist;
+package com.haiboyu.algorithm.linkedlist;
 
 /**
  * Node used for linked list

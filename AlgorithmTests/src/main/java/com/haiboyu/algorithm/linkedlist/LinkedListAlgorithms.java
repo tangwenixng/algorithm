@@ -1,4 +1,4 @@
-package com.sealyu.algorithm.linkedlist;
+package com.haiboyu.algorithm.linkedlist;
 
 /**
  * This class includes all linked list related algorithms
