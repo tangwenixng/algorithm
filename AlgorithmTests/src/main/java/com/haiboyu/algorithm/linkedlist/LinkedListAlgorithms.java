@@ -188,6 +188,7 @@ public class LinkedListAlgorithms {
             }
         }
 
+        //无环时返回null
         return null;
     }
 
@@ -206,9 +207,95 @@ public class LinkedListAlgorithms {
         while(position2 != null && position2.getNext() != null){
             position1 = position1.getNext();
             position2 = position2.getNext().getNext();
+            if(position1.equals(position2)){
+                //先判断是否有环
+                break;
+            }
+        }
+
+        //不存在环返回null
+        if(!position1.equals(position2)){
+            return null;
+        }
+
+        //快指针重新从表头开始按照步长1走，与慢指针相遇的点就是环入口。
+        position2 = headNodeOfSourceList;
+        while(!position1.equals(position2)){
+            position1 = position1.getNext();
+            position2 = position2.getNext();
         }
 
         return position1;
+    }
+
+    /**
+     * Given 2 linked list, check if they intersect:
+     * @param headNodeOfSourceList1 The head node of list 1
+     * @param headNodeOfSourceList2 The head node of list 2
+     * @return The flag of if the two linked list intersect
+     */
+    public boolean checkIfLinkedListHasCircle(Node headNodeOfSourceList1, Node headNodeOfSourceList2){
+        if(headNodeOfSourceList1 == null || headNodeOfSourceList2 == null){
+            return false;
+        }
+        while(headNodeOfSourceList1.getNext() != null){
+            headNodeOfSourceList1 = headNodeOfSourceList1.getNext();
+        }
+
+        while(headNodeOfSourceList2.getNext() != null){
+            headNodeOfSourceList2 = headNodeOfSourceList2.getNext();
+        }
+
+        return headNodeOfSourceList1.equals(headNodeOfSourceList2);
+    }
+
+    /**
+     * Get the lengh of the linked list
+     * @param headNodeOfSourceList The head node of the linked list
+     * @return The length of the linked list
+     */
+    private int getLengthOfLinkedList(Node headNodeOfSourceList){
+        if(null == headNodeOfSourceList){
+            return 0;
+        }
+        int length = 0;
+        while(headNodeOfSourceList != null){
+            headNodeOfSourceList = headNodeOfSourceList.getNext();
+            length++;
+        }
+        return  length;
+    }
+
+    /**
+     * Given 2 linked list, get the first common node of the 2 intersected linked list.
+     * @param headNodeOfSourceList1 The head node of list 1
+     * @param headNodeOfSourceList2 The head node of list 2
+     * @return The intersect node of 2 linked list
+     */
+    public Node getIntersectNodeOfTheTwoIntersectLinkedList(Node headNodeOfSourceList1, Node headNodeOfSourceList2){
+        int length1 = getLengthOfLinkedList(headNodeOfSourceList1);
+        int length2 = getLengthOfLinkedList(headNodeOfSourceList2);
+
+        //First move the longer linked list to the same size node postion as the other one
+        if(length1 < length2){
+            for(int i = 0; i < length2 - length1; i++)
+            {
+                headNodeOfSourceList2 = headNodeOfSourceList2.getNext();
+            }
+        }else{
+            for(int i = 0; i < length1 - length2; i++)
+            {
+                headNodeOfSourceList1 = headNodeOfSourceList1.getNext();
+            }
+        }
+
+        //Then move both linked list forward, the first equal node is the intesect node
+        while(null != headNodeOfSourceList1 && !headNodeOfSourceList1.equals(headNodeOfSourceList2)){
+            headNodeOfSourceList1 = headNodeOfSourceList1.getNext();
+            headNodeOfSourceList2 = headNodeOfSourceList2.getNext();
+        }
+
+        return headNodeOfSourceList1;
     }
 
 }
