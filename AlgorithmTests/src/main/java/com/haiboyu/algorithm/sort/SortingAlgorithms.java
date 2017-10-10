@@ -60,18 +60,15 @@ public class SortingAlgorithms {
      */
     public void insertionSort(int[] srcArray){
         int length = srcArray.length;
-        for(int i=1; i<length; i++){
-            int currentMinIndex = i;
-            for(int j=i+1; j<length;j++){
-                if(srcArray[j] < srcArray[currentMinIndex]){
-                    currentMinIndex = j;
-                }
-            }
-            if(i != currentMinIndex){
-                int temp = srcArray[i];
-                srcArray[i] = srcArray[currentMinIndex];
-                srcArray[currentMinIndex] = temp;
-            }
+        int temp;
+        for(int i=1; i<length; i++){            
+            for(int j = i-1; j>=0; j--){
+                if( srcArray[j+1] < srcArray[j] ){
+                    temp = srcArray[j+1];
+                    srcArray[j+1] = srcArray[j];
+                    srcArray[j] = temp;
+                }   
+            }   
         }
     }
 
